@@ -56,7 +56,8 @@ try:
             if line_count == 5:
                 line_count = 0
 except serial.SerialException:
-    file_name = 'result.csv'
+    the_time = datetime.now().strftime("%Y.%m.%d_%H.%M.%S")
+    file_name = 'result_{}.csv'.format(the_time)
     fd = open(file_name, 'wb')
     one_big_text = ''.join(result_excel_ls)
     fd.write(one_big_text)
