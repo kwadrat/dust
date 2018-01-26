@@ -25,7 +25,7 @@ def f2a(one_float):
 result_excel_ls = []
 
 try:
-    excel_line = excel_format.format('Time', 'PM 2.5', 'PM 10')
+    excel_line = excel_format.format('Time', 'PM 2.5 [ug/m^3]', 'PM 10 [ug/m^3]')
     result_excel_ls.append(excel_line)
     while True:
         lastbyte = byte
