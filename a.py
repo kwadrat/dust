@@ -17,8 +17,16 @@ ser.flushInput()
 
 byte = lastbyte = chr(0)
 line_count = 0
+excel_format = "{};{};{}\r\n"
+
+def f2a(one_float):
+    return str(one_float).replace('.', ',')
+
+result_excel_ls = []
 
 try:
+    excel_line = excel_format.format('Time', 'PM 2.5', 'PM 10')
+    result_excel_ls.append(excel_line)
     while True:
         lastbyte = byte
         byte = ser.read(size=1)
@@ -38,9 +46,19 @@ try:
 
             if line_count == 0:
                 line = "PM 2.5: {} ug/m^3  PM 10: {} ug/m^3".format(pm_25, pm_10)
-                print(datetime.now().strftime("%d %b %Y %H:%M:%S.%f: ")+line)
+                the_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                excel_line = excel_format.format(the_time, f2a(pm_25), f2a(pm_10))
+                result_excel_ls.append(excel_line)
+
+                print(the_time + ' ' + line)
+                
             line_count += 1
             if line_count == 5:
                 line_count = 0
 except serial.SerialException:
-    pass
+    file_name = 'result.csv'
+    fd = open(file_name, 'wb')
+    one_big_text = ''.join(result_excel_ls)
+    fd.write(one_big_text)
+    fd.close()
+    print "Written {} lines to file {}".format(len(result_excel_ls), file_name)
